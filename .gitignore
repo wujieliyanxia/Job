@@ -1,3 +1,35 @@
+# general
+*~
+*.log
+*.gz
+tmp
+dump
+.DS_Store
+.history
+dump.rdb
+bestsign-sdk-logs
+
+# VSCode
+**/.vscode/
+
+# Intellij
+**/.idea/
+*.iml
+
+# Eclipse
+.settings
+.sts4-cache
+.cache-main
+.cache-tests
+.cache
+.project
+.classpath
+.scala_dependencies
+.factorypath
+bin
+output
+
+
 # Compiled class file
 *.class
 
