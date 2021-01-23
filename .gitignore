@@ -8,6 +8,7 @@ dump
 .history
 dump.rdb
 bestsign-sdk-logs
+**/target
 
 # VSCode
 **/.vscode/
