@@ -1,6 +1,7 @@
-package exception;
+package com.buer.job.exception;
 
-import static exception.ExceptionLogLevel.ERROR;
+
+import static com.buer.job.exception.ExceptionLogLevel.ERROR;
 
 /**
  * Created by jiewu on 2021/1/23

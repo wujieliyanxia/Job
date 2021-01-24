@@ -1,7 +1,7 @@
 package com.buer.job.response;
 
 import lombok.NoArgsConstructor;
-import utils.Clock;
+import com.buer.job.utils.Clock;
 
 @NoArgsConstructor
 public class BaseResponseStatus {

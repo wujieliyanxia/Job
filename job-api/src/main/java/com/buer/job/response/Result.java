@@ -1,7 +1,7 @@
 package com.buer.job.response;
 
 
-import exception.JobException;
+import com.buer.job.exception.JobException;
 
 public interface Result<T> {
   Result originOk();

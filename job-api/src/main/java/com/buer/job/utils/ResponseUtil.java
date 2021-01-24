@@ -2,7 +2,7 @@ package com.buer.job.utils;
 
 import com.buer.job.response.BaseResponse;
 import com.buer.job.response.Result;
-import exception.JobException;
+import com.buer.job.exception.JobException;
 
 public final class ResponseUtil {
   private static Result result = new BaseResponse();

@@ -1,4 +1,4 @@
-package exception;
+package com.buer.job.exception;
 
 import org.slf4j.helpers.MessageFormatter;
 

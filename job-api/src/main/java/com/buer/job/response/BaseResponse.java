@@ -1,6 +1,6 @@
 package com.buer.job.response;
 
-import exception.JobException;
+import com.buer.job.exception.JobException;
 import lombok.NoArgsConstructor;
 import org.springframework.http.HttpStatus;
 
