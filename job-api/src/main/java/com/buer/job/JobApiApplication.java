@@ -7,7 +7,7 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 /**
  * Created by jiewu on 2021/1/23
  */
-@MapperScan("com.buer.job.mapper")
+@MapperScan("com.buer.job.model.mapper")
 @SpringBootApplication
 public class JobApiApplication {
   public static void main(String[] args) {
