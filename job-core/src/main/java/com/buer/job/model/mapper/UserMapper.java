@@ -1,16 +1,16 @@
 package com.buer.job.model.mapper;
 
-import com.buer.job.model.entity.Test;
+import com.buer.job.model.entity.User;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 
 /**
  * <p>
- *  Mapper 接口
+ * ??? Mapper 接口
  * </p>
  *
  * @author jiewu
- * @since 2021-01-24
+ * @since 2021-01-26
  */
-public interface TestMapper extends BaseMapper<Test> {
+public interface UserMapper extends BaseMapper<User> {
 
 }
