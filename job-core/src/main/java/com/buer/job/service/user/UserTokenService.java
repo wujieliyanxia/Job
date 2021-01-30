@@ -52,11 +52,17 @@ public class UserTokenService {
     }
   }
 
-  public UserToken getUserId(String token) {
+  public UserToken getByToken(String token) {
     UserToken userToken = userTokenMapper.findValidByToken(token);
     if (userToken == null) {
       throw JobException.error("can not find record by token {}", token);
     }
     return userToken;
+  }
+
+  public void disableToken(String token) {
+    UserToken userToken = getByToken(token);
+    userToken.setStatus(AvailabilityStatus.DISABLED.code);
+    userTokenMapper.updateById(userToken);
   }
 }

@@ -8,11 +8,5 @@ public interface Result<T> {
 
   Result originOk(T body);
 
-  Result originBadRequest(String message);
-
-  Result originUnauthorized();
-
-  Result originNotFound();
-
   Result serverException(JobException exception);
 }

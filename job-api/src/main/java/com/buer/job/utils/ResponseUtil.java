@@ -7,18 +7,6 @@ import com.buer.job.exception.JobException;
 public final class ResponseUtil {
   private static Result result = new BaseResponse();
 
-  public static Result originBadRequest(String content) {
-    return result.originBadRequest(content);
-  }
-
-  public static Result originUnauthorized() {
-    return result.originUnauthorized();
-  }
-
-  public static Result originNotFound() {
-    return result.originNotFound();
-  }
-
   public static Result originServiceException(JobException exception) {
     return result.serverException(exception);
   }

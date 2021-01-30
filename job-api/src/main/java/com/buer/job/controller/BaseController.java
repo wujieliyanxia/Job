@@ -30,7 +30,7 @@ public class BaseController {
 
   protected ViewerContext getViewerContext() {
     String token = RequestParser.getUserToken(request());
-    UserToken userToken = userTokenService.getUserId(token);
+    UserToken userToken = userTokenService.getByToken(token);
     ViewerContext viewerContext = new ViewerContext();
     viewerContext.userId = userToken.getUserId();
     return viewerContext;
