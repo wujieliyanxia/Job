@@ -42,6 +42,12 @@ public class Article implements Serializable {
     /**
      * ????
      */
+    @TableField("ARTICLE_IMAGE_KEY")
+    private String articleImageKey;
+
+    /**
+     * ????
+     */
     @TableField("ARTICLE_TYPE")
     private String articleType;
 
