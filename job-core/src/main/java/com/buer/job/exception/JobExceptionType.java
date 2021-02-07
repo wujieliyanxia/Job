@@ -10,6 +10,7 @@ import static com.buer.job.exception.ExceptionLogLevel.WARN;
 public enum JobExceptionType {
   COMMON_SERVER_ERROR(1001, ERROR),
   SECURE_API_UNAUTHORIZED_USER(1002, WARN),
+  COMMON_CUSTOM_MESSAGE(1003, WARN),
   ;
 
   public int code;
