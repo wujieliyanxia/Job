@@ -1,9 +1,14 @@
 package com.buer.job.service.article;
 
+import com.buer.job.enums.ArticleCntType;
 import com.buer.job.enums.ArticleType;
 import com.buer.job.exception.JobException;
 import com.buer.job.model.entity.Article;
 import com.buer.job.model.mapper.ArticleMapper;
+import com.buer.job.service.cache.ArticleCntLoader;
+import com.buer.job.service.cache.UserForwardLoader;
+import com.buer.job.service.cache.UserLikeLoader;
+import com.buer.job.service.cache.UserViewLoader;
 import com.buer.job.service.mongo.ArticleMongoModel;
 import com.buer.job.utils.Clock;
 import com.buer.job.vo.ArticleDetailVO;
@@ -26,10 +31,18 @@ public class ArticleService {
   private ArticleMapper articleMapper;
   @Autowired
   private ArticleMongoModel articleMongoModel;
+  @Autowired
+  private ArticleCntLoader articleCntLoader;
+  @Autowired
+  private UserViewLoader userViewLoader;
+  @Autowired
+  private UserLikeLoader userLikeLoader;
+  @Autowired
+  private UserForwardLoader userForwardLoader;
 
   public Article insert(Long authorId, String title, ArticleType articleType,
-                     String articleSource, String creationType,
-                     String introduction, String content, String articleImageKey) {
+                        String articleSource, String creationType,
+                        String introduction, String content, String articleImageKey) {
     String objectId = articleMongoModel.insert(content);
     Article article = new Article();
     article.setAuthorId(authorId);
@@ -49,8 +62,8 @@ public class ArticleService {
     return article;
   }
 
-  public List<ArticleSimpleVO> getListVO(Long endTime, Integer limit) {
-    List<Article> articles = endTime == null ? articleMapper.find(limit) : articleMapper.findByTimePublish(endTime, limit);
+  public List<ArticleSimpleVO> getListVO(ArticleType articleType, Long endTime, Integer limit) {
+    List<Article> articles = endTime == null ? articleMapper.find(articleType.name(), limit) : articleMapper.findByTimePublishAndArticleType(articleType.name(), endTime, limit);
     if (CollectionUtils.isEmpty(articles)) {
       return new ArrayList<>();
     }
@@ -66,5 +79,30 @@ public class ArticleService {
     Article article = articleMapper.selectById(id);
     return Optional.ofNullable(article).orElseThrow(() -> JobException.error("can not find article by id,id is {}", id)
     );
+  }
+
+  public void updateCnt(Long articleId, Long userId, ArticleCntType articleCntType) {
+    articleCntLoader.incrCnt(articleId, articleCntType);
+    switch (articleCntType) {
+      case LIKE_CNT:
+        userLikeLoader.sadd(userId, articleId);
+        break;
+      case VIEW_CNT:
+        userViewLoader.sadd(userId, articleId);
+        break;
+      case FORWARD_CNT:
+        userForwardLoader.sadd(userId, articleId);
+        break;
+      default:
+        throw JobException.error("unsupported articleCntType {}", articleCntType);
+    }
+  }
+
+  public int getArticleCnt(Long articleId, ArticleCntType articleCntType) {
+    return articleCntLoader.getCnt(articleId, articleCntType);
+  }
+
+  public boolean userViewedArticle(Long articleId, Long userId) {
+    return userViewLoader.isMember(userId, articleId);
   }
 }

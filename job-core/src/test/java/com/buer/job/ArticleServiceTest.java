@@ -26,7 +26,7 @@ public class ArticleServiceTest extends BaseTest {
     ArticleDetailVO detailVO = articleService.getArticleDetail(article.getId());
     Assert.assertNotNull(detailVO);
     Assert.assertEquals("this is content html", detailVO.getHtmlContent());
-    List<ArticleSimpleVO> listVO = articleService.getListVO(Clock.now(), 10);
+    List<ArticleSimpleVO> listVO = articleService.getListVO(ArticleType.GOOD_ARTICLE, Clock.now(), 10);
     Assert.assertTrue(listVO.size() >= 1);
   }
 }

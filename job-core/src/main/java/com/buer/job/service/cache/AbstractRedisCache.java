@@ -5,6 +5,8 @@ import com.buer.job.utils.JsonUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.core.GenericTypeResolver;
 
+import java.util.Map;
+
 /**
  * Created by jiewu on 2021/1/26
  */
@@ -45,4 +47,20 @@ public abstract class AbstractRedisCache<K, V> {
   }
 
 
+  public void hincrby(K key, V hashKey, int cnt) {
+    cacheProvider.hincrby(generateKey(key), hashKey, cnt);
+  }
+
+
+  public Map<Object, Object> hgetAll(K key) {
+    return cacheProvider.hgetAll(generateKey(key));
+  }
+
+  public void sadd(K key, V val) {
+    cacheProvider.sadd(generateKey(key), JsonUtils.toString(val));
+  }
+
+  public boolean isMember(K key, V val) {
+    return cacheProvider.isMember(generateKey(key), JsonUtils.toString(val));
+  }
 }
