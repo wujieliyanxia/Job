@@ -33,5 +33,5 @@ CREATE TABLE `job`
     PRIMARY KEY (`ID`),
     KEY `index__compay_id` (`COMPANY_ID`),
     KEY `index__name` (`JOB_NAME`),
-    KEY `index__publish_time` (`PUBLISH_TIME`),
+    KEY `index__publish_time` (`PUBLISH_TIME`)
 ) COMMENT '岗位表';
