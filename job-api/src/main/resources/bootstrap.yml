@@ -12,3 +12,19 @@ spring:
       name: job
 server:
   port: 8887
+
+
+---
+spring:
+  main:
+    web-application-type: SERVLET
+  profiles:
+    active: test
+  application:
+    name: job-api
+  cloud:
+    config:
+      uri: http://120.53.7.165:8888
+      name: job
+server:
+  port: 8887

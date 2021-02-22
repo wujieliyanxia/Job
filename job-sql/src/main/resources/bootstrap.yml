@@ -12,3 +12,19 @@ spring:
       name: job
 server:
   port: 8887
+
+
+---
+spring:
+  main:
+    web-application-type: none
+  profiles:
+    active: test
+  application:
+    name: job-sql
+  cloud:
+    config:
+      uri: http://120.53.7.165:8888
+      name: job
+server:
+  port: 8887
