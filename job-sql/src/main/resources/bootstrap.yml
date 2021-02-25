@@ -2,14 +2,14 @@
 spring:
   main:
     web-application-type: none
-  profiles:
-    active: dev
+  profiles: dev
   application:
     name: job-sql
   cloud:
     config:
       uri: http://localhost:8888
       name: job
+      profile: dev
 server:
   port: 8887
 
@@ -18,13 +18,13 @@ server:
 spring:
   main:
     web-application-type: none
-  profiles:
-    active: test
+  profiles: test
   application:
     name: job-sql
   cloud:
     config:
       uri: http://120.53.7.165:8888
       name: job
+      profile: test
 server:
   port: 8887
