@@ -93,6 +93,9 @@
             <plugin>
                 <groupId>org.springframework.boot</groupId>
                 <artifactId>spring-boot-maven-plugin</artifactId>
+                <configuration>
+                    <mainClass>com.buer.job.JobApiApplication</mainClass>
+                </configuration>
             </plugin>
         </plugins>
     </build>
