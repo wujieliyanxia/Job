@@ -12,10 +12,7 @@ import com.buer.job.utils.ResponseUtil;
 import com.buer.job.utils.filestorage.FileType;
 import com.buer.job.utils.filestorage.IFileStorage;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestPart;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.validation.Valid;
@@ -41,52 +38,47 @@ public class InternalController {
   @Autowired
   private IFileStorage fileStorage;
 
-
-  @PostMapping("/admin/add/article")
-  public Result insert(@RequestBody @Valid AdminArticleRequest request,
-                       @RequestPart("titlePage") MultipartFile titlePage) {
-    if (!KEY.equals(request.key)) {
-      throw JobException.error("key不对应 key is {}", request.key);
+  @PostMapping("/admin/uploadFile")
+  public Result upload(@RequestPart("file") MultipartFile multipart,
+                       @RequestParam("name") String name,
+                       @RequestParam("uuid") String uuid) {
+    if (!KEY.equals(uuid)) {
+      throw JobException.error("key不对应 key is {}", uuid);
     }
     String key;
     try {
-      key = fileStorage.uploadFile(titlePage.getBytes(), Clock.now() + request.title, FileType.IMAGE);
+      key = fileStorage.uploadFile(multipart.getBytes(), Clock.now() + name, FileType.IMAGE);
     } catch (IOException e) {
       throw JobException.warn(JobExceptionType.COMMON_CUSTOM_MESSAGE, "上传图片error", e);
     }
-    articleService.insert(request.authorId, request.title, request.articleType, request.articleSource, request.creationType, request.introduction, request.content, key);
+    return ResponseUtil.originOk(key);
+  }
+
+
+  @PostMapping("/admin/add/article")
+  public Result insert(@RequestBody @Valid AdminArticleRequest request) {
+    if (!KEY.equals(request.key)) {
+      throw JobException.error("key不对应 key is {}", request.key);
+    }
+    articleService.insert(request.authorId, request.title, request.articleType, request.articleSource, request.creationType, request.introduction, request.content, request.titlePageKey);
     return ResponseUtil.originOk();
   }
 
   @PostMapping("/admin/add/author")
-  public Result insertAuthor(@RequestBody @Valid AdminAuthorRequest request,
-                             @RequestPart("imageHeader") MultipartFile imageHeader) {
+  public Result insertAuthor(@RequestPart @Valid AdminAuthorRequest request) {
     if (!KEY.equals(request.key)) {
       throw JobException.error("key不对应 key is {}", request.key);
     }
-    String key;
-    try {
-      key = fileStorage.uploadFile(imageHeader.getBytes(), Clock.now() + request.name, FileType.IMAGE);
-    } catch (IOException e) {
-      throw JobException.warn(JobExceptionType.COMMON_CUSTOM_MESSAGE, "上传图片error", e);
-    }
-    authorService.insert(request.name, key);
+    authorService.insert(request.name, request.authorImageKey);
     return ResponseUtil.originOk();
   }
 
-  @PostMapping("/admin/add/company")
-  public Result insertCompany(@RequestBody @Valid AdminCompanyRequest request,
-                              @RequestPart("companyLogo") MultipartFile companyLogo) {
+  @PostMapping(value = "/admin/add/company")
+  public Result insertCompany(@RequestBody @Valid AdminCompanyRequest request) {
     if (!KEY.equals(request.key)) {
       throw JobException.error("key不对应 key is {}", request.key);
     }
-    String key;
-    try {
-      key = fileStorage.uploadFile(companyLogo.getBytes(), Clock.now() + request.companyName, FileType.IMAGE);
-    } catch (IOException e) {
-      throw JobException.warn(JobExceptionType.COMMON_CUSTOM_MESSAGE, "上传图片error", e);
-    }
-    companyService.insert(request.companyName, request.profile, request.address, key);
+    companyService.insert(request.companyName, request.profile, request.address, request.companyLogoKey);
     return ResponseUtil.originOk();
   }
 

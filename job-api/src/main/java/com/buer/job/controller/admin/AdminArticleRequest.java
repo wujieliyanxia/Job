@@ -23,4 +23,6 @@ public class AdminArticleRequest extends AdminBaseRequest {
   public String introduction;
   @NotBlank
   public String content;
+  @NotNull
+  public String titlePageKey;
 }
