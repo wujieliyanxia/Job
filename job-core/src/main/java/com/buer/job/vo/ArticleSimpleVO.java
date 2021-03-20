@@ -15,6 +15,7 @@ public class ArticleSimpleVO {
   private ArticleType articleType;
   private String introduction;
   private String imageKey;
+  private long timeCreated;
 
   public static ArticleSimpleVO from(Article article) {
     ArticleSimpleVO simpleVO = new ArticleSimpleVO();
@@ -24,6 +25,7 @@ public class ArticleSimpleVO {
     simpleVO.setArticleType(ArticleType.valueOf(article.getArticleType()));
     simpleVO.setIntroduction(article.getIntroduction());
     simpleVO.setImageKey(article.getArticleImageKey());
+    simpleVO.setTimeCreated(article.getTimeCreated());
     return simpleVO;
   }
 }

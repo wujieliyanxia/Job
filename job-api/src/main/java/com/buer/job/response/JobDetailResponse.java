@@ -1,6 +1,7 @@
 package com.buer.job.response;
 
 import com.buer.job.enums.WorkType;
+import com.buer.job.vo.CompanyVO;
 import com.buer.job.vo.JobDetailVO;
 
 import java.util.List;
@@ -12,6 +13,7 @@ public class JobDetailResponse {
   public Long companyId;
   public String companyName;
   public String companyLogoUrl;
+  public String companyProfile;
   public String jobName;
   public WorkType workType;
   public String jobType;
@@ -24,13 +26,17 @@ public class JobDetailResponse {
   public String jobIntroduction;
   public String contactEmail;
   public List<String> tagList;
+  public String resumeName;
 
 
-  public static JobDetailResponse from(JobDetailVO detailVO, JobSimpleResponse simpleResponse) {
+  public static JobDetailResponse from(JobDetailVO detailVO,
+                                       CompanyVO companyVO,
+                                       JobSimpleResponse simpleResponse) {
     JobDetailResponse response = new JobDetailResponse();
     response.companyId = simpleResponse.companyId;
     response.companyName = simpleResponse.companyName;
     response.companyLogoUrl = simpleResponse.companyLogoUrl;
+    response.companyProfile = companyVO.getProfile();
     response.jobName = simpleResponse.jobName;
     response.workType = simpleResponse.workType;
     response.jobType = simpleResponse.jobType;

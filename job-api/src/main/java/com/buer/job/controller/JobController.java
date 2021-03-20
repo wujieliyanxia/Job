@@ -8,8 +8,10 @@ import com.buer.job.response.JobSimpleResponse;
 import com.buer.job.response.Result;
 import com.buer.job.service.company.CompanyService;
 import com.buer.job.service.job.JobService;
+import com.buer.job.service.user.UserService;
 import com.buer.job.utils.ResponseUtil;
 import com.buer.job.utils.filestorage.IFileStorage;
+import com.buer.job.viewer.ViewerContext;
 import com.buer.job.vo.CompanyVO;
 import com.buer.job.vo.JobDetailVO;
 import com.buer.job.vo.JobSimpleVO;
@@ -33,6 +35,8 @@ public class JobController extends BaseController {
   private CompanyService companyService;
   @Autowired
   private IFileStorage fileStorage;
+  @Autowired
+  private UserService userService;
 
 
   @GetMapping("/api/job")
@@ -51,11 +55,15 @@ public class JobController extends BaseController {
 
   @GetMapping("/api/job/{id}")
   public Result detail(@PathVariable(name = "id") Long id) {
+    ViewerContext viewerContext = getViewerContext();
+//    User user = userService.selectByIdOrThrow(viewerContext.userId);
+
     JobDetailVO detailVO = jobService.getJobDetail(id);
     CompanyVO companyVO = companyService.findByIdOrThrow(detailVO.getSimpleVO().getCompanyId());
     String companyLogoUrl = fileStorage.getFileDownloadUrl(companyVO.getLogoKey());
+
     JobSimpleResponse simpleResponse = JobSimpleResponse.from(detailVO.getSimpleVO(), companyVO, companyLogoUrl);
-    return ResponseUtil.originOk(JobDetailResponse.from(detailVO, simpleResponse));
+    return ResponseUtil.originOk(JobDetailResponse.from(detailVO, companyVO, simpleResponse));
   }
 
 

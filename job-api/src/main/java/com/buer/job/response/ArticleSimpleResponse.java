@@ -17,6 +17,7 @@ public class ArticleSimpleResponse {
   private int likeNumber;
   private int numberOfView;
   private boolean viewed;
+  private long timeCreated;
 
   public static ArticleSimpleResponse from(ArticleSimpleVO articleSimpleVO,
                                            AuthorVO authorVO,
@@ -35,6 +36,7 @@ public class ArticleSimpleResponse {
     response.setLikeNumber(likeNumber);
     response.setNumberOfView(numberOfView);
     response.setViewed(viewed);
+    response.setTimeCreated(articleSimpleVO.getTimeCreated());
     return response;
   }
 }
