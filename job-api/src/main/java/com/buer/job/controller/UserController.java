@@ -46,6 +46,7 @@ public class UserController extends BaseController {
     return ResponseUtil.originOk();
   }
 
+
   // TODO(JIEWU,T0000)之后将这个test删除
   // TODO(JIEWU,T0000)添加全局的异常控制
   @GetMapping("/api/test")

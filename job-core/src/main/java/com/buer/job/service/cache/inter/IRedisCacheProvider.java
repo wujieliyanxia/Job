@@ -1,6 +1,7 @@
 package com.buer.job.service.cache.inter;
 
 import java.util.Map;
+import java.util.Set;
 
 /**
  * Created by jiewu on 2021/1/26
@@ -25,4 +26,6 @@ public interface IRedisCacheProvider {
   void sadd(String key, String value);
 
   boolean isMember(String key, String value);
+
+  Set<String> members(String key);
 }

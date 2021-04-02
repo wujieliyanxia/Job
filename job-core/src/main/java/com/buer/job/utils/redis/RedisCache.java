@@ -8,6 +8,7 @@ import org.springframework.data.redis.core.ValueOperations;
 import org.springframework.stereotype.Component;
 
 import java.util.Map;
+import java.util.Set;
 import java.util.concurrent.TimeUnit;
 
 /**
@@ -64,6 +65,11 @@ public class RedisCache implements IRedisCacheProvider {
   @Override
   public boolean isMember(String key, String value) {
     return redisTemplate.opsForSet().isMember(key, value);
+  }
+
+  @Override
+  public Set<String> members(String key) {
+    return redisTemplate.opsForSet().members(key);
   }
 
   @Override

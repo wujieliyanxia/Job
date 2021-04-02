@@ -18,6 +18,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.util.CollectionUtils;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -64,6 +65,35 @@ public class ArticleService {
 
   public List<ArticleSimpleVO> getListVO(ArticleType articleType, Long endTime, Integer limit) {
     List<Article> articles = endTime == null ? articleMapper.find(articleType.name(), limit) : articleMapper.findByTimePublishAndArticleType(articleType.name(), endTime, limit);
+    if (CollectionUtils.isEmpty(articles)) {
+      return new ArrayList<>();
+    }
+    return articles.stream().map(ArticleSimpleVO::from).collect(Collectors.toList());
+  }
+
+  public List<ArticleSimpleVO> getListVOWithUserBehavior(Long userId, ArticleCntType articleCntType) {
+    Collection<Long> ids;
+    switch (articleCntType) {
+      case VIEW_CNT:
+        ids = userViewLoader.members(userId);
+        break;
+      case LIKE_CNT:
+        ids = userLikeLoader.members(userId);
+        break;
+      case FORWARD_CNT:
+        ids = userForwardLoader.members(userId);
+        break;
+      default:
+        throw JobException.error("unsupported articleCntType {},userId is {}", articleCntType, userId);
+    }
+    return getListVO(ids);
+  }
+
+  public List<ArticleSimpleVO> getListVO(Collection<Long> articleIds) {
+    if (CollectionUtils.isEmpty(articleIds)) {
+      return new ArrayList<>();
+    }
+    List<Article> articles = articleMapper.selectBatchIds(articleIds);
     if (CollectionUtils.isEmpty(articles)) {
       return new ArrayList<>();
     }

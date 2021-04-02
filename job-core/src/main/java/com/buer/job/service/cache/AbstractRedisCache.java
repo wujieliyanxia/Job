@@ -4,8 +4,12 @@ import com.buer.job.service.cache.inter.IRedisCacheProvider;
 import com.buer.job.utils.JsonUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.core.GenericTypeResolver;
+import org.springframework.util.CollectionUtils;
 
+import java.util.HashSet;
 import java.util.Map;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 /**
  * Created by jiewu on 2021/1/26
@@ -62,5 +66,13 @@ public abstract class AbstractRedisCache<K, V> {
 
   public boolean isMember(K key, V val) {
     return cacheProvider.isMember(generateKey(key), JsonUtils.toString(val));
+  }
+
+  public Set<V> members(K key) {
+    Set<String> members = cacheProvider.members(generateKey(key));
+    if (CollectionUtils.isEmpty(members)) {
+      return new HashSet<>();
+    }
+    return members.stream().map(val -> JsonUtils.from(val, modelClass)).collect(Collectors.toSet());
   }
 }
