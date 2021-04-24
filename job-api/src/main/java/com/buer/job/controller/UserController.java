@@ -1,9 +1,11 @@
 package com.buer.job.controller;
 
 import com.buer.job.aop.JobSecuredApi;
+import com.buer.job.request.UploadUserDetailRequest;
 import com.buer.job.request.UploadWeChatMobileInfo;
 import com.buer.job.response.LoginResponse;
 import com.buer.job.response.Result;
+import com.buer.job.service.user.UserAdditionalInfoService;
 import com.buer.job.service.user.UserService;
 import com.buer.job.service.user.UserTokenService;
 import com.buer.job.utils.RequestParser;
@@ -23,6 +25,8 @@ public class UserController extends BaseController {
   private UserService userService;
   @Autowired
   private UserTokenService userTokenService;
+  @Autowired
+  private UserAdditionalInfoService additionalInfoService;
 
   @PostMapping("/api/login")
   public Result login(@RequestParam("code") String code) {
@@ -46,14 +50,11 @@ public class UserController extends BaseController {
     return ResponseUtil.originOk();
   }
 
-
-  // TODO(JIEWU,T0000)之后将这个test删除
-  // TODO(JIEWU,T0000)添加全局的异常控制
-  @GetMapping("/api/test")
+  @PostMapping("/api/user/detail")
   @JobSecuredApi
-  public Result test() {
+  public Result uploadUserDetail(@RequestBody @Valid UploadUserDetailRequest detailRequest) {
+    ViewerContext viewerContext = getViewerContext();
+    additionalInfoService.update(viewerContext.userId, detailRequest.school, detailRequest.graduationTime, null, null);
     return ResponseUtil.originOk();
   }
-
-
 }

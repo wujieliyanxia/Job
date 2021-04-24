@@ -53,6 +53,11 @@ public class ArticleController extends BaseController {
     return ResponseUtil.originOk(ArticleDetailResponse.from(detailVO));
   }
 
+  /**
+   * 个人中心相关detail
+   * @param behaviorType
+   * @return
+   */
   @GetMapping("/api/user/behavior/article")
   @JobSecuredApi
   public Result fetchArticleListWithUserBehavior(@RequestParam(name = "behaviorType") UserBehaviorType behaviorType) {

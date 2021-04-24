@@ -35,10 +35,13 @@ public class UserService {
   private UserTokenService userTokenService;
   @Autowired
   private WeChatSessionLoader weChatSessionLoader;
+  @Autowired
+  private UserAdditionalInfoService userAdditionalInfoService;
   private static long TOKEN_TIMEOUT = 2 * Clock.SECOND_PER_DAY;
   private static long WE_CHAT_SESSION_TIMEOUT = 2 * Clock.SECOND_PER_DAY;
 
   public String loginWithWeChat(String code) {
+    // TODO(JIEWU,看看需不需要加锁保证下)
     WeChatSessionVO sessionVO = weChatService.login(code);
     WechatInfo wechatInfo = wechatInfoMapper.findByOpenId(sessionVO.getOpenId());
     User user;
@@ -46,6 +49,7 @@ public class UserService {
     if (wechatInfo == null) {
       // 这里未来可能会加其他逻辑
       user = initUser(sessionVO.getOpenId());
+      userAdditionalInfoService.init(user.getId());
     } else {
       user = selectByIdOrThrow(wechatInfo.getUserId());
     }
@@ -107,6 +111,10 @@ public class UserService {
     User user = selectByIdOrThrow(userId);
     user.setMobileNumber(mobileNumberVO.getPurePhoneNumber());
     userMapper.updateById(user);
+  }
+
+  public void storeUserAdditionalInfo() {
+
   }
 
   public void updateWeChatUserInfo(Long userId) {
