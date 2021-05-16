@@ -16,6 +16,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.util.CollectionUtils;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -76,5 +77,13 @@ public class JobService {
     Job job = jobMapper.selectById(id);
     return Optional.ofNullable(job).orElseThrow(() -> JobException.error("can not find article by id,id is {}", id)
     );
+  }
+
+  public List<JobSimpleVO> getListVO(Collection<Long> ids) {
+    if (CollectionUtils.isEmpty(ids)) {
+      return new ArrayList<>();
+    }
+    List<Job> jobList = jobMapper.selectBatchIds(ids);
+    return jobList.stream().map(JobSimpleVO::from).collect(Collectors.toList());
   }
 }

@@ -3,14 +3,15 @@ package com.buer.job.controller;
 import com.buer.job.aop.JobSecuredApi;
 import com.buer.job.enums.ArticleCntType;
 import com.buer.job.enums.ArticleType;
-import com.buer.job.request.ArticleViewRequest;
-import com.buer.job.request.enums.UserBehaviorType;
+import com.buer.job.enums.BehaviorSource;
+import com.buer.job.enums.BehaviorType;
 import com.buer.job.response.ArticleDetailResponse;
 import com.buer.job.response.ArticleSimpleListResponse;
 import com.buer.job.response.ArticleSimpleResponse;
 import com.buer.job.response.Result;
 import com.buer.job.service.article.ArticleService;
 import com.buer.job.service.author.AuthorService;
+import com.buer.job.service.behavior.UserBehaviorService;
 import com.buer.job.utils.ResponseUtil;
 import com.buer.job.utils.filestorage.IFileStorage;
 import com.buer.job.viewer.ViewerContext;
@@ -18,9 +19,11 @@ import com.buer.job.vo.ArticleDetailVO;
 import com.buer.job.vo.ArticleSimpleVO;
 import com.buer.job.vo.AuthorVO;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RestController;
 
-import javax.validation.Valid;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -35,6 +38,8 @@ public class ArticleController extends BaseController {
   private AuthorService authorService;
   @Autowired
   private IFileStorage fileStorage;
+  @Autowired
+  private UserBehaviorService userBehaviorService;
 
   @GetMapping("/api/article")
   @JobSecuredApi
@@ -50,28 +55,25 @@ public class ArticleController extends BaseController {
   @GetMapping("/api/article/{id}")
   public Result detail(@PathVariable(name = "id") Long id) {
     ArticleDetailVO detailVO = articleService.getArticleDetail(id);
+    ViewerContext viewerContext = getViewerContext();
+    userBehaviorService.asyncInsert(viewerContext.userId, id, BehaviorType.VIEW, BehaviorSource.ARTICLE);
     return ResponseUtil.originOk(ArticleDetailResponse.from(detailVO));
   }
 
   /**
    * 个人中心相关detail
+   *
    * @param behaviorType
    * @return
    */
   @GetMapping("/api/user/behavior/article")
   @JobSecuredApi
-  public Result fetchArticleListWithUserBehavior(@RequestParam(name = "behaviorType") UserBehaviorType behaviorType) {
+  public Result fetchArticleListWithUserBehavior(@RequestParam(name = "behaviorType") BehaviorType behaviorType) {
     ViewerContext viewerContext = getViewerContext();
-    List<ArticleSimpleVO> articleSimpleVOList = articleService.getListVOWithUserBehavior(viewerContext.userId, behaviorType.getAssociatedArticleCntType());
+    List<Long> targetIds = userBehaviorService.fetchBehaviorList(viewerContext.userId, behaviorType, BehaviorSource.ARTICLE);
+    List<ArticleSimpleVO> articleSimpleVOList = articleService.getListVO(targetIds);
     List<ArticleSimpleResponse> responseList = articleSimpleVOList.stream().map(simpleVO -> from(simpleVO, viewerContext.userId)).collect(Collectors.toList());
     return ResponseUtil.originOk(ArticleSimpleListResponse.from(responseList));
-  }
-
-
-  @PostMapping("/api/article/cnt")
-  public Result view(@RequestBody @Valid ArticleViewRequest viewRequest) {
-    articleService.updateCnt(viewRequest.articleId, viewRequest.userId, viewRequest.articleCntType);
-    return ResponseUtil.originOk();
   }
 
   private ArticleSimpleResponse from(ArticleSimpleVO articleSimpleVO, Long userId) {

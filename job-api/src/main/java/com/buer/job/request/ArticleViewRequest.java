@@ -1,6 +1,7 @@
 package com.buer.job.request;
 
-import com.buer.job.enums.ArticleCntType;
+import com.buer.job.enums.BehaviorSource;
+import com.buer.job.enums.BehaviorType;
 
 import javax.validation.constraints.NotNull;
 
@@ -9,9 +10,11 @@ import javax.validation.constraints.NotNull;
  */
 public class ArticleViewRequest {
   @NotNull
-  public Long articleId;
+  public Long targetId;
   @NotNull
   public Long userId;
   @NotNull
-  public ArticleCntType articleCntType;
+  public BehaviorType behaviorType;
+  @NotNull
+  public BehaviorSource behaviorSource;
 }

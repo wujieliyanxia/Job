@@ -7,6 +7,7 @@ import com.buer.job.model.mapper.UserBehaviorMapper;
 import com.buer.job.utils.Clock;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -16,6 +17,11 @@ import java.util.List;
 public class UserBehaviorService {
   @Autowired
   private UserBehaviorMapper userBehaviorMapper;
+
+  @Async
+  public void asyncInsert(Long userId, Long targetId, BehaviorType behaviorType, BehaviorSource source) {
+    insert(userId, targetId, behaviorType, source);
+  }
 
   public void insert(Long userId, Long targetId, BehaviorType behaviorType, BehaviorSource source) {
     UserBehavior userBehavior = new UserBehavior();
@@ -27,6 +33,7 @@ public class UserBehaviorService {
     userBehaviorMapper.insert(userBehavior);
   }
 
+  // TODO(WUJIE,未来加上分页吧),先限制100个
   public List<Long> fetchBehaviorList(Long userId, BehaviorType behaviorType, BehaviorSource source) {
     return userBehaviorMapper.fetchByParam(userId, behaviorType.code, source.code);
   }
