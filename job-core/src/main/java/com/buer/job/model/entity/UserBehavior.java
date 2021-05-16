@@ -41,6 +41,12 @@ public class UserBehavior implements Serializable {
     private String type;
 
     /**
+     * 岗位|文章
+     */
+    @TableField("SOURCE")
+    private String source;
+
+    /**
      * 对应的目标id
      */
     @TableField("TARGET_ID")

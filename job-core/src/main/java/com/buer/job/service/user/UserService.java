@@ -113,10 +113,6 @@ public class UserService {
     userMapper.updateById(user);
   }
 
-  public void storeUserAdditionalInfo() {
-
-  }
-
   public void updateWeChatUserInfo(Long userId) {
     // TODO(JIEWU，和前端对完之后，确定下这个userInfo都有些啥信息)
   }

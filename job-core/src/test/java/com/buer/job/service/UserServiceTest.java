@@ -1,5 +1,6 @@
-package com.buer.job;
+package com.buer.job.service;
 
+import com.buer.job.BaseTest;
 import com.buer.job.service.user.UserService;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;

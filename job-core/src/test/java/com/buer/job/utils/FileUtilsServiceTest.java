@@ -1,5 +1,6 @@
-package com.buer.job;
+package com.buer.job.utils;
 
+import com.buer.job.BaseTest;
 import com.buer.job.utils.FileUtil;
 import com.buer.job.utils.filestorage.FileType;
 import com.buer.job.utils.filestorage.IFileStorage;
@@ -21,7 +22,7 @@ public class FileUtilsServiceTest extends BaseTest {
   @Test
   @Ignore
   public void testQiniu() throws IOException {
-    String login = fileStorage.uploadFile(FileUtil.toByteArray(new File("/Users/yqg/Desktop/login.jpg")), "login", FileType.IMAGE);
+    String login = fileStorage.uploadFile(FileUtil.toByteArray(new File("C:\\Users\\test\\Desktop\\image.png")), "login", FileType.IMAGE);
     System.out.println(login);
   }
 }

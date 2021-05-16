@@ -1,7 +1,11 @@
 package com.buer.job.model.mapper;
 
-import com.buer.job.model.entity.UserBehavior;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
+import com.buer.job.model.entity.UserBehavior;
+import org.apache.ibatis.annotations.Param;
+import org.apache.ibatis.annotations.Select;
+
+import java.util.List;
 
 /**
  * <p>
@@ -12,5 +16,6 @@ import com.baomidou.mybatisplus.core.mapper.BaseMapper;
  * @since 2021-03-30
  */
 public interface UserBehaviorMapper extends BaseMapper<UserBehavior> {
-
+  @Select("select target_id from user_behavior where user_id = #{userId} and type = #{type} and source = #{source}")
+  List<Long> fetchByParam(@Param("userId") Long userId, @Param("type") String type, @Param("source") String source);
 }

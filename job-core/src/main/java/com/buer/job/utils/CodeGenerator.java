@@ -48,8 +48,7 @@ public class CodeGenerator {
 
     // 数据源配置
     DataSourceConfig dsc = new DataSourceConfig();
-    dsc.setUrl("jdbc:mysql://localhost:3306/job_mock?characterEncoding=utf-8");
-    // dsc.setSchemaName("public");
+    dsc.setUrl("jdbc:mysql://localhost:3306/job_mock?characterEncoding=utf-8&useSSL=false&serverTimezone=GMT%2B8");
     dsc.setDriverName("com.mysql.jdbc.Driver");
     dsc.setUsername("root");
     dsc.setPassword("");

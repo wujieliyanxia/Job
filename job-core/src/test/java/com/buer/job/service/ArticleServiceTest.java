@@ -1,5 +1,6 @@
-package com.buer.job;
+package com.buer.job.service;
 
+import com.buer.job.BaseTest;
 import com.buer.job.enums.ArticleType;
 import com.buer.job.model.entity.Article;
 import com.buer.job.service.article.ArticleService;
