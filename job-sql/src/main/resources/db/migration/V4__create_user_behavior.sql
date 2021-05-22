@@ -9,5 +9,6 @@ CREATE TABLE `user_behavior`
     PRIMARY KEY (`ID`),
     KEY `index__user_source_type` (`USER_ID`,`SOURCE`,`TYPE`),
     KEY `index__target_id` (`TARGET_ID`),
-    KEY `index__time_created` (`TIME_CREATED`)
+    KEY `index__time_created` (`TIME_CREATED`),
+    UNIQUE KEY `uindex__user_target_type_source`(`USER_ID`,`TARGET_ID`,`TYPE`,`SOURCE`)
 ) COMMENT '用户行为表';

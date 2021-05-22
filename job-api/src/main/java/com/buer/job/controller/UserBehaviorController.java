@@ -22,7 +22,7 @@ public class UserBehaviorController extends BaseController {
 
 
   @PostMapping("/api/user/behavior")
-  public Result view(@RequestBody @Valid ArticleViewRequest viewRequest) {
+  public Result behavior(@RequestBody @Valid ArticleViewRequest viewRequest) {
     ViewerContext viewerContext = getViewerContext();
     userBehaviorService.insert(viewerContext.userId, viewRequest.targetId, viewRequest.behaviorType, viewRequest.behaviorSource);
     return ResponseUtil.originOk();

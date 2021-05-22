@@ -26,6 +26,7 @@ public class UserAdditionalInfoService {
     userAdditionalInfo.setUserId(userId);
     long now = Clock.now();
     userAdditionalInfo.setTimeCreated(now);
+    userAdditionalInfo.setTimeUpdated(now);
     userAdditionalInfoMapper.insert(userAdditionalInfo);
   }
 

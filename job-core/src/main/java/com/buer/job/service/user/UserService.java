@@ -26,7 +26,7 @@ import java.util.UUID;
 @Service
 public class UserService {
   @Autowired
-  private WeChatService weChatService;
+  private IWeChatService weChatService;
   @Autowired
   private UserMapper userMapper;
   @Autowired
@@ -41,7 +41,6 @@ public class UserService {
   private static long WE_CHAT_SESSION_TIMEOUT = 2 * Clock.SECOND_PER_DAY;
 
   public String loginWithWeChat(String code) {
-    // TODO(JIEWU,看看需不需要加锁保证下)
     WeChatSessionVO sessionVO = weChatService.login(code);
     WechatInfo wechatInfo = wechatInfoMapper.findByOpenId(sessionVO.getOpenId());
     User user;
@@ -49,7 +48,6 @@ public class UserService {
     if (wechatInfo == null) {
       // 这里未来可能会加其他逻辑
       user = initUser(sessionVO.getOpenId());
-      userAdditionalInfoService.init(user.getId());
     } else {
       user = selectByIdOrThrow(wechatInfo.getUserId());
     }
@@ -92,6 +90,8 @@ public class UserService {
     wechatInfo.setTimeCreated(now);
     wechatInfo.setTimeUpdated(now);
     wechatInfoMapper.insert(wechatInfo);
+
+    userAdditionalInfoService.init(user.getId());
     return user;
   }
 

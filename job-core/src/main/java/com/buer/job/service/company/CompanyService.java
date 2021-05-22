@@ -18,7 +18,7 @@ public class CompanyService {
   @Autowired
   private CompanyMapper companyMapper;
 
-  public void insert(String companyName,
+  public Company insert(String companyName,
                      String profile,
                      String address, String logoKey) {
     Company company = new Company();
@@ -30,10 +30,11 @@ public class CompanyService {
     company.setTimeCreated(now);
     company.setTimeUpdated(now);
     companyMapper.insert(company);
+    return company;
   }
 
   public CompanyVO findByIdOrThrow(Long id) {
     Company company = companyMapper.selectById(id);
-    return CompanyVO.from(Optional.ofNullable(company).orElseThrow(() -> JobException.error("can not find author by id {}", id)));
+    return CompanyVO.from(Optional.ofNullable(company).orElseThrow(() -> JobException.error("can not find company by id {}", id)));
   }
 }

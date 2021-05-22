@@ -24,13 +24,20 @@ public class UserBehaviorService {
   }
 
   public void insert(Long userId, Long targetId, BehaviorType behaviorType, BehaviorSource source) {
-    UserBehavior userBehavior = new UserBehavior();
-    userBehavior.setUserId(userId);
-    userBehavior.setSource(source.code);
-    userBehavior.setTargetId(targetId);
-    userBehavior.setType(behaviorType.code);
-    userBehavior.setTimeCreated(Clock.now());
-    userBehaviorMapper.insert(userBehavior);
+    UserBehavior existBehavior = userBehaviorMapper.fetchByUniqueKey(userId, targetId, behaviorType.code, source.code);
+    if (existBehavior == null) {
+      UserBehavior userBehavior = new UserBehavior();
+      userBehavior.setUserId(userId);
+      userBehavior.setSource(source.code);
+      userBehavior.setTargetId(targetId);
+      userBehavior.setType(behaviorType.code);
+      userBehavior.setTimeCreated(Clock.now());
+      userBehaviorMapper.insert(userBehavior);
+    } else {
+      existBehavior.setTimeCreated(Clock.now());
+      userBehaviorMapper.updateById(existBehavior);
+    }
+
   }
 
   // TODO(WUJIE,未来加上分页吧),先限制100个

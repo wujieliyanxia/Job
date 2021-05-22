@@ -12,8 +12,6 @@ public class ArticleViewRequest {
   @NotNull
   public Long targetId;
   @NotNull
-  public Long userId;
-  @NotNull
   public BehaviorType behaviorType;
   @NotNull
   public BehaviorSource behaviorSource;

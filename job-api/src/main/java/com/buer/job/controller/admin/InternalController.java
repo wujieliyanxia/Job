@@ -2,6 +2,8 @@ package com.buer.job.controller.admin;
 
 import com.buer.job.exception.JobException;
 import com.buer.job.exception.JobExceptionType;
+import com.buer.job.model.entity.Author;
+import com.buer.job.model.entity.Company;
 import com.buer.job.response.Result;
 import com.buer.job.service.article.ArticleService;
 import com.buer.job.service.author.AuthorService;
@@ -65,12 +67,12 @@ public class InternalController {
   }
 
   @PostMapping("/admin/add/author")
-  public Result insertAuthor(@RequestPart @Valid AdminAuthorRequest request) {
+  public Result insertAuthor(@RequestBody @Valid AdminAuthorRequest request) {
     if (!KEY.equals(request.key)) {
       throw JobException.error("key不对应 key is {}", request.key);
     }
-    authorService.insert(request.name, request.authorImageKey);
-    return ResponseUtil.originOk();
+    Author author = authorService.insert(request.name, request.authorImageKey);
+    return ResponseUtil.originOk(author);
   }
 
   @PostMapping(value = "/admin/add/company")
@@ -78,8 +80,8 @@ public class InternalController {
     if (!KEY.equals(request.key)) {
       throw JobException.error("key不对应 key is {}", request.key);
     }
-    companyService.insert(request.companyName, request.profile, request.address, request.companyLogoKey);
-    return ResponseUtil.originOk();
+    Company company = companyService.insert(request.companyName, request.profile, request.address, request.companyLogoKey);
+    return ResponseUtil.originOk(company);
   }
 
   @PostMapping("/admin/add/job")
