@@ -55,10 +55,12 @@ public class JobController extends BaseController {
 
   private List<JobSimpleResponse> getSimpleResponses(List<JobSimpleVO> simpleVOS) {
     List<JobSimpleResponse> responseList = new ArrayList<>();
+    ViewerContext viewerContext = getViewerContext();
     for (JobSimpleVO simpleVO : simpleVOS) {
       CompanyVO companyVO = companyService.findByIdOrThrow(simpleVO.getCompanyId());
       String companyLogoUrl = fileStorage.getFileDownloadUrl(companyVO.getLogoKey());
-      responseList.add(JobSimpleResponse.from(simpleVO, companyVO, companyLogoUrl));
+      boolean viewed = userBehaviorService.viewed(viewerContext.userId, simpleVO.getJobId(), BehaviorSource.JOB);
+      responseList.add(JobSimpleResponse.from(simpleVO, companyVO, companyLogoUrl, viewed));
     }
     return responseList;
   }
@@ -70,8 +72,9 @@ public class JobController extends BaseController {
     CompanyVO companyVO = companyService.findByIdOrThrow(detailVO.getSimpleVO().getCompanyId());
     String companyLogoUrl = fileStorage.getFileDownloadUrl(companyVO.getLogoKey());
     userBehaviorService.asyncInsert(viewerContext.userId, id, BehaviorType.VIEW, BehaviorSource.JOB);
+    boolean viewed = userBehaviorService.viewed(viewerContext.userId, detailVO.getSimpleVO().getJobId(), BehaviorSource.JOB);
 
-    JobSimpleResponse simpleResponse = JobSimpleResponse.from(detailVO.getSimpleVO(), companyVO, companyLogoUrl);
+    JobSimpleResponse simpleResponse = JobSimpleResponse.from(detailVO.getSimpleVO(), companyVO, companyLogoUrl, viewed);
     return ResponseUtil.originOk(JobDetailResponse.from(detailVO, companyVO, simpleResponse));
   }
 

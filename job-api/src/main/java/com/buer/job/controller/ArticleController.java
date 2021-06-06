@@ -1,7 +1,6 @@
 package com.buer.job.controller;
 
 import com.buer.job.aop.JobSecuredApi;
-import com.buer.job.enums.ArticleCntType;
 import com.buer.job.enums.ArticleType;
 import com.buer.job.enums.BehaviorSource;
 import com.buer.job.enums.BehaviorType;
@@ -78,8 +77,8 @@ public class ArticleController extends BaseController {
 
   private ArticleSimpleResponse from(ArticleSimpleVO articleSimpleVO, Long userId) {
     AuthorVO authorVO = authorService.findByAuthorIdOrThrow(articleSimpleVO.getId());
-    int likeNumber = articleService.getArticleCnt(articleSimpleVO.getId(), ArticleCntType.LIKE_CNT);
-    int viewNumber = articleService.getArticleCnt(articleSimpleVO.getId(), ArticleCntType.VIEW_CNT);
+    int likeNumber = articleService.getArticleCnt(articleSimpleVO.getId(), BehaviorType.COLLECTED);
+    int viewNumber = articleService.getArticleCnt(articleSimpleVO.getId(), BehaviorType.VIEW);
     boolean viewed = articleService.userViewedArticle(articleSimpleVO.getId(), userId);
     String imageUrl = fileStorage.getFileDownloadUrl(articleSimpleVO.getImageKey());
     String authorHeadUrl = fileStorage.getFileDownloadUrl(authorVO.getHeadImageKey());

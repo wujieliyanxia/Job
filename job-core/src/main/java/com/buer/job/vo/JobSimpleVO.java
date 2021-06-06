@@ -11,6 +11,7 @@ import lombok.Data;
  */
 @Data
 public class JobSimpleVO {
+  private Long jobId;
   private Long companyId;
   private String jobName;
   private WorkType workType;
@@ -24,6 +25,7 @@ public class JobSimpleVO {
 
   public static JobSimpleVO from(Job job) {
     JobSimpleVO jobSimpleVO = new JobSimpleVO();
+    jobSimpleVO.setJobId(job.getId());
     jobSimpleVO.setCompanyId(job.getCompanyId());
     jobSimpleVO.setJobName(job.getJobName());
     jobSimpleVO.setWorkType(WorkType.fromCode(job.getWorkType()));

@@ -1,14 +1,13 @@
 package com.buer.job.service.article;
 
-import com.buer.job.enums.ArticleCntType;
 import com.buer.job.enums.ArticleType;
+import com.buer.job.enums.BehaviorSource;
+import com.buer.job.enums.BehaviorType;
 import com.buer.job.exception.JobException;
 import com.buer.job.model.entity.Article;
 import com.buer.job.model.mapper.ArticleMapper;
+import com.buer.job.service.behavior.UserBehaviorService;
 import com.buer.job.service.cache.ArticleCntLoader;
-import com.buer.job.service.cache.UserForwardLoader;
-import com.buer.job.service.cache.UserLikeLoader;
-import com.buer.job.service.cache.UserViewLoader;
 import com.buer.job.service.mongo.ArticleMongoModel;
 import com.buer.job.utils.Clock;
 import com.buer.job.vo.ArticleDetailVO;
@@ -35,11 +34,8 @@ public class ArticleService {
   @Autowired
   private ArticleCntLoader articleCntLoader;
   @Autowired
-  private UserViewLoader userViewLoader;
-  @Autowired
-  private UserLikeLoader userLikeLoader;
-  @Autowired
-  private UserForwardLoader userForwardLoader;
+  private UserBehaviorService userBehaviorService;
+
 
   public Article insert(Long authorId, String title, ArticleType articleType,
                         String articleSource, String creationType,
@@ -71,24 +67,6 @@ public class ArticleService {
     return articles.stream().map(ArticleSimpleVO::from).collect(Collectors.toList());
   }
 
-  public List<ArticleSimpleVO> getListVOWithUserBehavior(Long userId, ArticleCntType articleCntType) {
-    Collection<Long> ids;
-    switch (articleCntType) {
-      case VIEW_CNT:
-        ids = userViewLoader.members(userId);
-        break;
-      case LIKE_CNT:
-        ids = userLikeLoader.members(userId);
-        break;
-      case FORWARD_CNT:
-        ids = userForwardLoader.members(userId);
-        break;
-      default:
-        throw JobException.error("unsupported articleCntType {},userId is {}", articleCntType, userId);
-    }
-    return getListVO(ids);
-  }
-
   public List<ArticleSimpleVO> getListVO(Collection<Long> articleIds) {
     if (CollectionUtils.isEmpty(articleIds)) {
       return new ArrayList<>();
@@ -111,28 +89,11 @@ public class ArticleService {
     );
   }
 
-  public void updateCnt(Long articleId, Long userId, ArticleCntType articleCntType) {
-    articleCntLoader.incrCnt(articleId, articleCntType);
-    switch (articleCntType) {
-      case LIKE_CNT:
-        userLikeLoader.sadd(userId, articleId);
-        break;
-      case VIEW_CNT:
-        userViewLoader.sadd(userId, articleId);
-        break;
-      case FORWARD_CNT:
-        userForwardLoader.sadd(userId, articleId);
-        break;
-      default:
-        throw JobException.error("unsupported articleCntType {}", articleCntType);
-    }
-  }
-
-  public int getArticleCnt(Long articleId, ArticleCntType articleCntType) {
-    return articleCntLoader.getCnt(articleId, articleCntType);
+  public int getArticleCnt(Long articleId, BehaviorType behaviorType) {
+    return userBehaviorService.getCnt(articleId, behaviorType, BehaviorSource.ARTICLE);
   }
 
   public boolean userViewedArticle(Long articleId, Long userId) {
-    return userViewLoader.isMember(userId, articleId);
+    return userBehaviorService.viewed(userId, articleId, BehaviorSource.ARTICLE);
   }
 }

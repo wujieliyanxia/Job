@@ -11,6 +11,7 @@ import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Objects;
 
 @Service
 @Slf4j
@@ -43,5 +44,13 @@ public class UserBehaviorService {
   // TODO(WUJIE,未来加上分页吧),先限制100个
   public List<Long> fetchBehaviorList(Long userId, BehaviorType behaviorType, BehaviorSource source) {
     return userBehaviorMapper.fetchByParam(userId, behaviorType.code, source.code);
+  }
+
+  public boolean viewed(Long userId, Long targetId, BehaviorSource source) {
+    return Objects.nonNull(userBehaviorMapper.fetchByUniqueKey(userId, targetId, BehaviorType.VIEW.code, source.code));
+  }
+
+  public Integer getCnt(Long targetId, BehaviorType behaviorType, BehaviorSource behaviorSource) {
+    return userBehaviorMapper.fetchCnt(targetId, behaviorType.code, behaviorSource.code);
   }
 }

@@ -21,4 +21,7 @@ public interface UserBehaviorMapper extends BaseMapper<UserBehavior> {
 
   @Select("select * from user_behavior where user_id = #{userId} and target_id =  #{targetId} and type = #{type} and source = #{source} limit 100")
   UserBehavior fetchByUniqueKey(@Param("userId") Long userId, @Param("targetId") Long targetId, @Param("type") String type, @Param("source") String source);
+
+  @Select("select count(id) from user_behavior where target_id =  #{targetId} and type = #{type} and source = #{source} limit 100")
+  Integer fetchCnt(@Param("targetId") Long targetId, @Param("type") String type, @Param("source") String source);
 }

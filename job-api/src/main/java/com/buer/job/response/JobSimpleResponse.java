@@ -19,8 +19,9 @@ public class JobSimpleResponse {
   public Long publishTime;
   public String workCity;
   public String salary;
+  public boolean viewed;
 
-  public static JobSimpleResponse from(JobSimpleVO simpleVO, CompanyVO companyVO, String companyLogoUrl) {
+  public static JobSimpleResponse from(JobSimpleVO simpleVO, CompanyVO companyVO, String companyLogoUrl, boolean viewed) {
     JobSimpleResponse response = new JobSimpleResponse();
     response.companyId = simpleVO.getCompanyId();
     response.companyName = companyVO.getCompanyName();
@@ -50,6 +51,7 @@ public class JobSimpleResponse {
       default:
         throw JobException.error("can not find salaryType {}", simpleVO.getSalaryType());
     }
+    response.viewed = viewed;
     return response;
   }
 
