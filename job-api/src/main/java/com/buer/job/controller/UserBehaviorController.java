@@ -1,5 +1,6 @@
 package com.buer.job.controller;
 
+import com.buer.job.aop.JobSecuredApi;
 import com.buer.job.request.ArticleViewRequest;
 import com.buer.job.response.Result;
 import com.buer.job.service.behavior.UserBehaviorService;
@@ -22,6 +23,7 @@ public class UserBehaviorController extends BaseController {
 
 
   @PostMapping("/api/user/behavior")
+  @JobSecuredApi
   public Result behavior(@RequestBody @Valid ArticleViewRequest viewRequest) {
     ViewerContext viewerContext = getViewerContext();
     userBehaviorService.insert(viewerContext.userId, viewRequest.targetId, viewRequest.behaviorType, viewRequest.behaviorSource);

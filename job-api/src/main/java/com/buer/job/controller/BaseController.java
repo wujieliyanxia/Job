@@ -4,6 +4,7 @@ import com.buer.job.model.entity.UserToken;
 import com.buer.job.service.user.UserTokenService;
 import com.buer.job.utils.RequestParser;
 import com.buer.job.viewer.ViewerContext;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
@@ -29,9 +30,13 @@ public class BaseController {
   }
 
   protected ViewerContext getViewerContext() {
-    String token = RequestParser.getUserToken(request());
-    UserToken userToken = userTokenService.getByToken(token);
     ViewerContext viewerContext = new ViewerContext();
+    String token = RequestParser.getUserToken(request());
+    if (StringUtils.isBlank(token)) {
+      viewerContext.userId = -1L;
+      return viewerContext;
+    }
+    UserToken userToken = userTokenService.getByToken(token);
     viewerContext.userId = userToken.getUserId();
     return viewerContext;
   }

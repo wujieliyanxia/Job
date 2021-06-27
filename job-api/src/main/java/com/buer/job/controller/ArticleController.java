@@ -54,7 +54,9 @@ public class ArticleController extends BaseController {
   public Result detail(@PathVariable(name = "id") Long id) {
     ArticleDetailVO detailVO = articleService.getArticleDetail(id);
     ViewerContext viewerContext = getViewerContext();
-    userBehaviorService.asyncInsert(viewerContext.userId, id, BehaviorType.VIEW, BehaviorSource.ARTICLE);
+    if (viewerContext.userId != -1L) {
+      userBehaviorService.asyncInsert(viewerContext.userId, id, BehaviorType.VIEW, BehaviorSource.ARTICLE);
+    }
     return ResponseUtil.originOk(ArticleDetailResponse.from(detailVO));
   }
 
@@ -78,7 +80,7 @@ public class ArticleController extends BaseController {
     AuthorVO authorVO = authorService.findByAuthorIdOrThrow(articleSimpleVO.getId());
     int likeNumber = articleService.getArticleCnt(articleSimpleVO.getId(), BehaviorType.COLLECTED);
     int viewNumber = articleService.getArticleCnt(articleSimpleVO.getId(), BehaviorType.VIEW);
-    boolean viewed = articleService.userViewedArticle(articleSimpleVO.getId(), userId);
+    boolean viewed = userId == -1L ? false : articleService.userViewedArticle(articleSimpleVO.getId(), userId);
     String imageUrl = fileStorage.getFileDownloadUrl(articleSimpleVO.getImageKey());
     String authorHeadUrl = fileStorage.getFileDownloadUrl(authorVO.getHeadImageKey());
     return ArticleSimpleResponse.from(articleSimpleVO, authorVO, imageUrl, authorHeadUrl, likeNumber, viewNumber, viewed);

@@ -58,7 +58,8 @@ public class JobController extends BaseController {
     for (JobSimpleVO simpleVO : simpleVOS) {
       CompanyVO companyVO = companyService.findByIdOrThrow(simpleVO.getCompanyId());
       String companyLogoUrl = fileStorage.getFileDownloadUrl(companyVO.getLogoKey());
-      boolean viewed = userBehaviorService.viewed(viewerContext.userId, simpleVO.getJobId(), BehaviorSource.JOB);
+      boolean viewed = viewerContext.userId == -1L ? false :
+              userBehaviorService.viewed(viewerContext.userId, simpleVO.getJobId(), BehaviorSource.JOB);
       responseList.add(JobSimpleResponse.from(simpleVO, companyVO, companyLogoUrl, viewed));
     }
     return responseList;
@@ -70,9 +71,11 @@ public class JobController extends BaseController {
     JobDetailVO detailVO = jobService.getJobDetail(id);
     CompanyVO companyVO = companyService.findByIdOrThrow(detailVO.getSimpleVO().getCompanyId());
     String companyLogoUrl = fileStorage.getFileDownloadUrl(companyVO.getLogoKey());
-    userBehaviorService.asyncInsert(viewerContext.userId, id, BehaviorType.VIEW, BehaviorSource.JOB);
-    boolean viewed = userBehaviorService.viewed(viewerContext.userId, detailVO.getSimpleVO().getJobId(), BehaviorSource.JOB);
-
+    boolean viewed = false;
+    if (viewerContext.userId != -1L) {
+      userBehaviorService.asyncInsert(viewerContext.userId, id, BehaviorType.VIEW, BehaviorSource.JOB);
+      viewed = userBehaviorService.viewed(viewerContext.userId, detailVO.getSimpleVO().getJobId(), BehaviorSource.JOB);
+    }
     JobSimpleResponse simpleResponse = JobSimpleResponse.from(detailVO.getSimpleVO(), companyVO, companyLogoUrl, viewed);
     return ResponseUtil.originOk(JobDetailResponse.from(detailVO, companyVO, simpleResponse));
   }
