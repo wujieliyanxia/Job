@@ -45,7 +45,6 @@ public class JobController extends BaseController {
 
 
   @GetMapping("/api/job")
-  @JobSecuredApi
   public Result fetchJobList(@RequestParam(required = false, name = "endTime") Long endTime,
                              @RequestParam(name = "workType") WorkType workType) {
     List<JobSimpleVO> simpleVOS = jobService.getListVO(workType, endTime, 30);

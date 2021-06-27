@@ -41,7 +41,6 @@ public class ArticleController extends BaseController {
   private UserBehaviorService userBehaviorService;
 
   @GetMapping("/api/article")
-  @JobSecuredApi
   public Result fetchArticleList(@RequestParam(required = false, name = "endTime") Long endTime,
                                  @RequestParam(name = "articleType") ArticleType articleType) {
     ViewerContext viewerContext = getViewerContext();
