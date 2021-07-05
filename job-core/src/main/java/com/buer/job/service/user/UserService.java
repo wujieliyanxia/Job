@@ -37,7 +37,7 @@ public class UserService {
   private WeChatSessionLoader weChatSessionLoader;
   @Autowired
   private UserAdditionalInfoService userAdditionalInfoService;
-  private static long TOKEN_TIMEOUT = 2 * Clock.SECOND_PER_DAY;
+  private static long TOKEN_TIMEOUT = 2 * Clock.MILLS_PER_DAY;
   private static long WE_CHAT_SESSION_TIMEOUT = 2 * Clock.SECOND_PER_DAY;
 
   public String loginWithWeChat(String code) {

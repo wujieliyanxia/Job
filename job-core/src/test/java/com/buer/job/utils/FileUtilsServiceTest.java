@@ -1,10 +1,8 @@
 package com.buer.job.utils;
 
 import com.buer.job.BaseTest;
-import com.buer.job.utils.FileUtil;
 import com.buer.job.utils.filestorage.FileType;
 import com.buer.job.utils.filestorage.IFileStorage;
-
 import org.junit.Ignore;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,5 +22,6 @@ public class FileUtilsServiceTest extends BaseTest {
   public void testQiniu() throws IOException {
     String login = fileStorage.uploadFile(FileUtil.toByteArray(new File("C:\\Users\\test\\Desktop\\image.png")), "login", FileType.IMAGE);
     System.out.println(login);
+    fileStorage.downloadFileWithKeyOrThrowException(login);
   }
 }
