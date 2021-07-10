@@ -1,10 +1,12 @@
 package com.buer.job.controller;
 
 import com.buer.job.aop.JobSecuredApi;
+import com.buer.job.model.entity.UserAdditionalInfo;
 import com.buer.job.request.UploadUserDetailRequest;
 import com.buer.job.request.UploadWeChatMobileInfo;
 import com.buer.job.response.LoginResponse;
 import com.buer.job.response.Result;
+import com.buer.job.response.UserDetailResponse;
 import com.buer.job.service.user.UserAdditionalInfoService;
 import com.buer.job.service.user.UserService;
 import com.buer.job.service.user.UserTokenService;
@@ -54,7 +56,15 @@ public class UserController extends BaseController {
   @JobSecuredApi
   public Result uploadUserDetail(@RequestBody @Valid UploadUserDetailRequest detailRequest) {
     ViewerContext viewerContext = getViewerContext();
-    additionalInfoService.update(viewerContext.userId, detailRequest.school, detailRequest.graduationTime, null, null);
+    additionalInfoService.update(viewerContext.userId, detailRequest.school, detailRequest.graduationTime, detailRequest.name, null, null, null);
     return ResponseUtil.originOk();
+  }
+
+  @GetMapping("/api/user/detail")
+  @JobSecuredApi
+  public Result getUserDetail() {
+    ViewerContext viewerContext = getViewerContext();
+    UserAdditionalInfo userAdditionalInfo = additionalInfoService.findByUserId(viewerContext.userId);
+    return ResponseUtil.originOk(UserDetailResponse.from(userAdditionalInfo));
   }
 }

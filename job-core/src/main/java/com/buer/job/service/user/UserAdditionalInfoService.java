@@ -30,7 +30,7 @@ public class UserAdditionalInfoService {
     userAdditionalInfoMapper.insert(userAdditionalInfo);
   }
 
-  public void update(Long userId, String school, String graduationTime, Sex sex, String headerPic) {
+  public void update(Long userId, String school, String graduationTime, String name, Sex sex, String headerPic, String nickName) {
     UserAdditionalInfo userAdditionalInfo = userAdditionalInfoMapper.findByUserId(userId);
     if (userAdditionalInfo == null) {
       throw JobException.error("can not update before init,userId is {}", userId);
@@ -45,8 +45,18 @@ public class UserAdditionalInfoService {
     if (StringUtils.isNotBlank(headerPic)) {
       userAdditionalInfo.setHeaderPic(headerPic);
     }
+    if (StringUtils.isNotBlank(name)) {
+      userAdditionalInfo.setName(name);
+    }
+    if (StringUtils.isNotBlank(nickName)) {
+      userAdditionalInfo.setNickName(nickName);
+    }
     long now = Clock.now();
     userAdditionalInfo.setTimeUpdated(now);
     userAdditionalInfoMapper.updateById(userAdditionalInfo);
+  }
+
+  public UserAdditionalInfo findByUserId(Long userId) {
+    return userAdditionalInfoMapper.findByUserId(userId);
   }
 }

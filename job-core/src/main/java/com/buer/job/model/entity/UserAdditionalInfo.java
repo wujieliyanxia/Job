@@ -1,11 +1,12 @@
 package com.buer.job.model.entity;
 
 import com.baomidou.mybatisplus.annotation.IdType;
-import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableField;
-import java.io.Serializable;
+import com.baomidou.mybatisplus.annotation.TableId;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
+
+import java.io.Serializable;
 
 /**
  * <p>
@@ -44,6 +45,19 @@ public class UserAdditionalInfo implements Serializable {
      */
     @TableField("SEX")
     private String sex;
+
+    /**
+     * 姓名
+     */
+    @TableField("NAME")
+    private String name;
+
+
+    /**
+     * 昵称
+     */
+    @TableField("NICK_NAME")
+    private String nickName;
 
     /**
      * 用户头像

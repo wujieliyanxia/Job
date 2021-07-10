@@ -9,4 +9,13 @@ public enum Sex {
   Sex(int code) {
     this.code = code;
   }
+
+  public static Sex fromCode(String code) {
+    for (Sex sex : Sex.values()) {
+      if (sex.code == Integer.valueOf(code)) {
+        return sex;
+      }
+    }
+    return null;
+  }
 }
